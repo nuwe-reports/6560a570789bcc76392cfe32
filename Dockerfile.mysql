@@ -1,0 +1,7 @@
+# Dockerfile para crear una base de datos MySQL
+FROM mysql:8.0.23
+
+# Variables de entorno para la configuración de MySQL
+ENV MYSQL_DATABASE=mydatabase
+ENV MYSQL_USER=root
+ENV MYSQL_ROOT_PASSWORD=root
