@@ -1,0 +1,30 @@
+# Etapa 1: Construcción y Pruebas #############################################
+FROM maven:3.6.3-jdk-11-slim AS build
+
+# Copia de los archivos del proyecto
+COPY src /usr/src/myservice/src
+COPY pom.xml /usr/src/myservice
+
+# Establecimiento del directorio de trabajo
+WORKDIR /usr/src/myservice
+
+# Ejecucion de pruebas
+RUN mvn test
+
+# Compilacion del proyecto
+RUN mvn package
+
+# Etapa 2: Ejecución ##########################################################
+FROM openjdk:11-jre-slim
+
+# Copia del JAR compilado de la etapa anterior
+COPY --from=build /usr/src/myservice/target/accenture-techhub-0.0.1-SNAPSHOT.war /usr/service/myservice.jar
+
+# Establecimiento del directorio de trabajo
+WORKDIR /usr/service
+
+# Exponer el puerto 8080
+EXPOSE 8080
+
+# Comando para ejecutar la aplicación
+CMD ["java", "-jar", "myservice.war"]
